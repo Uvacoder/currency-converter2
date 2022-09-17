@@ -1,0 +1,36 @@
+{
+	"name": "currency-converter",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
+		"test": "npx playwright test",
+		"ci": "rm -rf node_modules && yarn install --frozen-lockfile"
+	},
+	"dependencies": {
+		"@emotion/react": "^11.10.4",
+		"@formkit/auto-animate": "^1.0.0-beta.3",
+		"axios": "^0.27.2",
+		"currencies.json": "^1.0.2",
+		"immer": "^9.0.15",
+		"next": "^12.3.0",
+		"react": "18.2.0",
+		"react-dom": "18.2.0",
+		"semantic-ui-css": "^2.4.1",
+		"semantic-ui-react": "^2.1.3",
+		"zustand": "^4.1.1"
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.25.2",
+		"@testing-library/react": "^13.4.0",
+		"@types/node": "18.7.14",
+		"@types/react": "18.0.18",
+		"@types/react-dom": "18.0.6",
+		"eslint": "8.23.0",
+		"eslint-config-next": "12.2.5",
+		"typescript": "4.8.2"
+	}
+}
