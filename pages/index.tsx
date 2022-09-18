@@ -1,24 +1,33 @@
-import { css } from "@emotion/react"
+import { css, Theme } from "@emotion/react"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
 import AddCurrencyCardButton from "components/AddCurrencyCardButton"
+import CurrencyCard from "components/CurrencyCard"
 import CurrencyForm from "components/CurrencyForm"
 import { Currency } from "currencies.json"
 import { apiFetch } from "lib/api-fetch"
 import type { GetStaticProps, NextPage } from "next"
+import useCardStore from "store/card"
 import useSearchStore from "store/search"
 
 type Props = StaticProps & {}
 const Home: NextPage<Props> = ({ currencies }) => {
+	const { cards } = useCardStore()
 	const { formDisplay } = useSearchStore()
+	const [formRef] = useAutoAnimate<HTMLLIElement>()
 	const [listRef] = useAutoAnimate<HTMLUListElement>()
 
 	return (
 		<div>
 			<ul ref={listRef} css={containerStyles}>
+				{cards.map((item, i) => (
+					<CurrencyCard key={i} item={item} />
+				))}
 				{formDisplay ? (
-					<CurrencyForm currencies={currencies} />
+					<li css={formStyles} ref={formRef}>
+						<CurrencyForm currencies={currencies} />
+					</li>
 				) : (
-			<AddCurrencyCardButton />
+					<AddCurrencyCardButton as="li" />
 				)}
 			</ul>
 		</div>
@@ -40,4 +49,15 @@ const containerStyles = css`
 	padding: 40px;
 	gap: 32px;
 `
+const formStyles = ({ colors, sizes }: Theme) => css`
+	width: ${sizes.control.cardWidth};
+	height: ${sizes.control.cardHeight};
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 6px;
+	border: 4px solid ${colors.control.cardBorder};
+	background-color: ${colors.control.cardBg};
+`
+
 export default Home

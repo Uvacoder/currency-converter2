@@ -1,5 +1,3 @@
-import { css, Theme } from "@emotion/react"
-import { useAutoAnimate } from "@formkit/auto-animate/react"
 import { Currency } from "currencies.json"
 import React from "react"
 import {
@@ -27,7 +25,6 @@ type Props = {
 	currencies: Currency[]
 }
 const CurrencyForm = ({ currencies }: Props) => {
-	const [formRef] = useAutoAnimate<HTMLDivElement>()
 	const { cards, addCard } = useCardStore()
 	const { hideForm, options, setOptions } = useSearchStore()
 	const mainCurrencies = cards.map((card) => card.baseCurrency)
@@ -60,30 +57,17 @@ const CurrencyForm = ({ currencies }: Props) => {
 	)
 
 	return (
-		<div css={formStyles} ref={formRef}>
-			<Card>
-				<p>Select base currency:</p>
-				<Search
-					results={options}
-					placeholder="Search..."
-					onSearchChange={handleSearch}
-					onResultSelect={handleSelect}
-					resultRenderer={resultRenderer}
-				/>
-			</Card>
-		</div>
+		<Card>
+			<p>Select base currency:</p>
+			<Search
+				results={options}
+				placeholder="Search..."
+				onSearchChange={handleSearch}
+				onResultSelect={handleSelect}
+				resultRenderer={resultRenderer}
+			/>
+		</Card>
 	)
 }
-
-const formStyles = ({ colors, sizes }: Theme) => css`
-	width: ${sizes.control.cardWidth};
-	height: ${sizes.control.cardHeight};
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 6px;
-	border: 4px solid ${colors.control.cardBorder};
-	background-color: ${colors.control.cardBg};
-`
 
 export default CurrencyForm

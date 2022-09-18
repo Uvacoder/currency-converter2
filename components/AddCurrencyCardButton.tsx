@@ -2,18 +2,23 @@ import { css, Theme } from "@emotion/react"
 import { Button } from "semantic-ui-react"
 import useSearchStore from "store/search"
 
-const AddCurrencyCardButton = () => {
+type Props = {
+	as?: keyof JSX.IntrinsicElements
+}
+const AddCurrencyCardButton = ({ as = "div" }: Props) => {
 	const { showForm } = useSearchStore()
 
+	const Tag = as
+
 	return (
-		<div css={controlStyles}>
+		<Tag css={controlStyles}>
 			<Button
 				icon="plus"
 				size="massive"
 				onClick={showForm}
 				css={addCardButtonStyles}
 			/>
-		</div>
+		</Tag>
 	)
 }
 
