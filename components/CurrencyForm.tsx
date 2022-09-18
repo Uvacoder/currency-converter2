@@ -1,3 +1,4 @@
+import { css } from "@emotion/react"
 import { Currency } from "currencies.json"
 import React from "react"
 import {
@@ -57,17 +58,30 @@ const CurrencyForm = ({ currencies }: Props) => {
 	)
 
 	return (
-		<Card>
-			<p>Select base currency:</p>
-			<Search
-				results={options}
-				placeholder="Search..."
-				onSearchChange={handleSearch}
-				onResultSelect={handleSelect}
-				resultRenderer={resultRenderer}
-			/>
+		<Card css={cardStyles}>
+			<Card.Content>
+				<p>Select base currency:</p>
+				<Search
+					fluid
+					results={options}
+					placeholder="Search..."
+					onSearchChange={handleSearch}
+					onResultSelect={handleSelect}
+					resultRenderer={resultRenderer}
+					css={searchStyles}
+				/>
+			</Card.Content>
 		</Card>
 	)
 }
+
+const cardStyles = css`
+	padding: 8px;
+`
+const searchStyles = css`
+	& > .input {
+		width: 100%;
+	}
+`
 
 export default CurrencyForm
