@@ -31,4 +31,10 @@ const theme = {
 			button: "#c0c0c0",
 		},
 	},
+	sizes: {
+		control: {
+			cardWidth: "320px",
+			cardHeight: "640px",
+		},
+	},
 }
