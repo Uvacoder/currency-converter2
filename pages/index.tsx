@@ -1,10 +1,15 @@
+import AddCurrencyCardButton from "components/AddCurrencyCardButton"
 import { Currency } from "currencies.json"
 import { apiFetch } from "lib/api-fetch"
 import type { GetStaticProps, NextPage } from "next"
 
 type Props = StaticProps & {}
 const Home: NextPage<Props> = ({ currencies }) => {
-	return <div></div>
+	return (
+		<div>
+			<AddCurrencyCardButton />
+		</div>
+	)
 }
 
 type StaticProps = {
