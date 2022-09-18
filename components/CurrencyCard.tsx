@@ -11,7 +11,7 @@ type Props = {
 	currencies: Currency[]
 }
 const CurrencyCard = ({ as, item, currencies }: Props) => {
-	const { setCardOptions } = useCardStore()
+	const { addCurrency, setCardOptions } = useCardStore()
 
 	const allOptions: Option[] = currencies.map(({ code, name }) => ({
 		value: code.toLocaleLowerCase(),
@@ -24,12 +24,15 @@ const CurrencyCard = ({ as, item, currencies }: Props) => {
 		const filteredOptions = allOptions.filter(
 			(currency) =>
 				item.baseCurrency !== currency.value &&
+				!item.currencyList.includes(currency.value) &&
 				currency.title.includes(value.toLocaleUpperCase())
 		)
 		setCardOptions({ base: item.baseCurrency, options: filteredOptions })
 	}
 
-	const handleSelect: SelectHandler = () => {}
+	const handleSelect: SelectHandler = (_, { result }) => {
+		addCurrency({ base: item.baseCurrency, newCurrency: result.value })
+	}
 
 	return (
 		<Card as={as} css={cardStyles}>
