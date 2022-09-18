@@ -1,8 +1,8 @@
 import { css } from "@emotion/react"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
 import { Currency } from "currencies.json"
-import { Card, Flag, FlagNameValues, Label } from "semantic-ui-react"
-import useCardStore, { Card as Item, CurrencyItem } from "store/card"
+import { Card, Flag, FlagNameValues, Label, Popup } from "semantic-ui-react"
+import useCardStore, { Card as Item } from "store/card"
 import { Option } from "store/search"
 import CurrencyForm, { SearchHandler, SelectHandler } from "./CurrencyForm"
 
@@ -36,18 +36,27 @@ const CurrencyCard = ({ as, item, currencies }: Props) => {
 		addCurrency({ base: item.baseCurrency, newCurrency: result.value })
 	}
 
-	const getCurrency = (item: CurrencyItem) =>
-		currencies.find((c) => c.code.toLocaleLowerCase() === item.code)
+	const getCurrency = (code: string) => {
+		return currencies.find((c) => c.code.toLocaleLowerCase() === code)
+	}
 
 	return (
 		<Card as={as} css={cardStyles}>
 			<Card.Content>
 				<Label basic size="big" css={headingStyles}>
-					<Flag
-						name={item.baseCurrency.slice(0, 2) as FlagNameValues}
-						css={flagStyles}
+					<Popup
+						content={getCurrency(item.baseCurrency)?.name}
+						position="top center"
+						trigger={
+							<span>
+								<Flag
+									name={item.baseCurrency.slice(0, 2) as FlagNameValues}
+									css={flagStyles}
+								/>
+								{item.baseCurrency.toLocaleUpperCase()}
+							</span>
+						}
 					/>
-					{item.baseCurrency.toLocaleUpperCase()}
 				</Label>
 				<CurrencyForm
 					options={item.options}
@@ -56,16 +65,25 @@ const CurrencyCard = ({ as, item, currencies }: Props) => {
 				/>
 				<ul css={listStyles} ref={listRef}>
 					{item.currencyList.map((c, i) => (
-						<Card as="li" key={i}>
-							<Card.Content>
-								<Card.Description css={itemStyles}>
-									<Flag name={c.code.slice(0, 2) as FlagNameValues} />
-									{c.code.toLocaleUpperCase()}{" "}
-									<span css={codeStyles}>{getCurrency(c)?.symbol}</span>
-									<span css={amountStyles}>{c.conversion.toFixed(2)}</span>
-								</Card.Description>
-							</Card.Content>
-						</Card>
+						<Popup
+							key={i}
+							content={getCurrency(c.code)?.name}
+							position="top center"
+							trigger={
+								<Card as="li">
+									<Card.Content>
+										<Card.Description css={itemStyles}>
+											<Flag name={c.code.slice(0, 2) as FlagNameValues} />
+											{c.code.toLocaleUpperCase()}{" "}
+											<span css={codeStyles}>
+												{getCurrency(c.code)?.symbol}
+											</span>
+											<span css={amountStyles}>{c.conversion.toFixed(2)}</span>
+										</Card.Description>
+									</Card.Content>
+								</Card>
+							}
+						/>
 					))}
 				</ul>
 			</Card.Content>
