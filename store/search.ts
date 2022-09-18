@@ -7,22 +7,22 @@ export type Option = {
 }
 
 type SearchState = {
-	options: Option[]
+	formOptions: Option[]
 	formDisplay: boolean
-	setOptions: (payload: Option[]) => void
+	setFormOptions: (payload: Option[]) => void
 	showForm: () => void
 	hideForm: () => void
 }
 const useSearchStore = createStore<SearchState>((set) => ({
-	options: [],
+	formOptions: [],
 	formDisplay: false,
-	setOptions: (payload) => set(setOptions(payload)),
+	setFormOptions: (payload) => set(setFormOptions(payload)),
 	showForm: () => set(showForm),
 	hideForm: () => set(hideForm),
 }))
 
-const setOptions = (payload: Option[]) => (state: SearchState) => {
-	state.options = payload
+const setFormOptions = (payload: Option[]) => (state: SearchState) => {
+	state.formOptions = payload
 }
 const showForm = (state: SearchState) => {
 	state.formDisplay = true

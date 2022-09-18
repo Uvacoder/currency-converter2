@@ -2,29 +2,59 @@ import { css, Theme } from "@emotion/react"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
 import AddCurrencyCardButton from "components/AddCurrencyCardButton"
 import CurrencyCard from "components/CurrencyCard"
-import CurrencyForm from "components/CurrencyForm"
+import CurrencyForm, {
+	SearchHandler,
+	SelectHandler,
+} from "components/CurrencyForm"
 import { Currency } from "currencies.json"
 import { apiFetch } from "lib/api-fetch"
 import type { GetStaticProps, NextPage } from "next"
 import useCardStore from "store/card"
-import useSearchStore from "store/search"
+import useSearchStore, { Option } from "store/search"
 
 type Props = StaticProps & {}
 const Home: NextPage<Props> = ({ currencies }) => {
-	const { cards } = useCardStore()
-	const { formDisplay } = useSearchStore()
+	const { cards, addCard } = useCardStore()
+	const { formDisplay, hideForm, formOptions, setFormOptions } =
+		useSearchStore()
 	const [formRef] = useAutoAnimate<HTMLLIElement>()
 	const [listRef] = useAutoAnimate<HTMLUListElement>()
+
+	const mainCurrencies = cards.map((card) => card.baseCurrency)
+	const allOptions: Option[] = currencies.map(({ code, name }) => ({
+		value: code.toLocaleLowerCase(),
+		title: code,
+		description: name,
+	}))
+
+	const handleSearch: SearchHandler = (_, { value }) => {
+		if (!value) return setFormOptions([])
+		const filteredOptions = allOptions.filter(
+			(currency) =>
+				!mainCurrencies.includes(currency.value) &&
+				currency.title.includes(value.toLocaleUpperCase())
+		)
+		setFormOptions(filteredOptions)
+	}
+
+	const handleSelect: SelectHandler = (_, { result }) => {
+		addCard(result.value)
+		hideForm()
+	}
 
 	return (
 		<div>
 			<ul ref={listRef} css={containerStyles}>
 				{cards.map((item, i) => (
-					<CurrencyCard key={i} item={item} />
+					<CurrencyCard key={i} item={item} currencies={currencies} />
 				))}
 				{formDisplay ? (
 					<li css={formStyles} ref={formRef}>
-						<CurrencyForm currencies={currencies} />
+						<CurrencyForm
+							options={formOptions}
+							onSearch={handleSearch}
+							onSelect={handleSelect}
+						/>
 					</li>
 				) : (
 					<AddCurrencyCardButton as="li" />

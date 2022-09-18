@@ -1,15 +1,39 @@
 import { css } from "@emotion/react"
-import { Card, Container, Flag, FlagNameValues, Label } from "semantic-ui-react"
-import { Card as CurrencyCard } from "store/card"
+import { Currency } from "currencies.json"
+import { Card, Flag, FlagNameValues, Label } from "semantic-ui-react"
+import useCardStore, { Card as Item } from "store/card"
+import { Option } from "store/search"
+import CurrencyForm, { SearchHandler, SelectHandler } from "./CurrencyForm"
 
 type Props = {
 	as?: keyof JSX.IntrinsicElements
-	item: CurrencyCard
+	item: Item
+	currencies: Currency[]
 }
-const CurrencyCard = ({ as, item }: Props) => {
+const CurrencyCard = ({ as, item, currencies }: Props) => {
+	const { setCardOptions } = useCardStore()
+
+	const allOptions: Option[] = currencies.map(({ code, name }) => ({
+		value: code.toLocaleLowerCase(),
+		title: code,
+		description: name,
+	}))
+
+	const handleSearch: SearchHandler = (_, { value }) => {
+		if (!value) return setCardOptions({ base: item.baseCurrency, options: [] })
+		const filteredOptions = allOptions.filter(
+			(currency) =>
+				item.baseCurrency !== currency.value &&
+				currency.title.includes(value.toLocaleUpperCase())
+		)
+		setCardOptions({ base: item.baseCurrency, options: filteredOptions })
+	}
+
+	const handleSelect: SelectHandler = () => {}
+
 	return (
 		<Card as={as} css={cardStyles}>
-			<Container>
+			<Card.Content>
 				<Label basic size="big" css={headingStyles}>
 					<Flag
 						name={item.baseCurrency.slice(0, 2) as FlagNameValues}
@@ -17,13 +41,19 @@ const CurrencyCard = ({ as, item }: Props) => {
 					/>
 					{item.baseCurrency.toLocaleUpperCase()}
 				</Label>
-			</Container>
+				<CurrencyForm
+					options={item.options}
+					onSearch={handleSearch}
+					onSelect={handleSelect}
+				/>
+			</Card.Content>
 		</Card>
 	)
 }
 
 const cardStyles = css`
 	position: relative;
+	padding-top: 4px !important;
 	margin: 0 !important;
 `
 const flagStyles = css`

@@ -1,5 +1,4 @@
 import { css } from "@emotion/react"
-import { Currency } from "currencies.json"
 import React from "react"
 import {
 	Card,
@@ -10,46 +9,23 @@ import {
 	SearchResultData,
 	SearchResultProps,
 } from "semantic-ui-react"
-import useCardStore from "store/card"
-import useSearchStore, { Option } from "store/search"
+import { Option } from "store/search"
 
-type SearchHandler = (
+export type SearchHandler = (
 	event: React.MouseEvent<HTMLElement, MouseEvent>,
 	props: SearchProps
 ) => void
-type SelectHandler = (
+export type SelectHandler = (
 	event: React.MouseEvent<HTMLDivElement, MouseEvent>,
 	props: SearchResultData
 ) => void
 
 type Props = {
-	currencies: Currency[]
+	options: Option[]
+	onSearch: SearchHandler
+	onSelect: SelectHandler
 }
-const CurrencyForm = ({ currencies }: Props) => {
-	const { cards, addCard } = useCardStore()
-	const { hideForm, options, setOptions } = useSearchStore()
-	const mainCurrencies = cards.map((card) => card.baseCurrency)
-	const allOptions: Option[] = currencies.map(({ code, name }) => ({
-		value: code.toLocaleLowerCase(),
-		title: code,
-		description: name,
-	}))
-
-	const handleSearch: SearchHandler = (_, { value }) => {
-		if (!value) return setOptions([])
-		const filteredOptions = allOptions.filter(
-			(currency) =>
-				!mainCurrencies.includes(currency.title) &&
-				currency.title.includes(value.toLocaleUpperCase())
-		)
-		setOptions(filteredOptions)
-	}
-
-	const handleSelect: SelectHandler = (_, { result }) => {
-		addCard(result.value)
-		hideForm()
-	}
-
+const CurrencyForm = ({ options, onSearch, onSelect }: Props) => {
 	const resultRenderer = ({ title, description }: SearchResultProps) => (
 		<p>
 			<Flag name={title.slice(0, 2).toLocaleLowerCase() as FlagNameValues} />
@@ -65,8 +41,8 @@ const CurrencyForm = ({ currencies }: Props) => {
 					fluid
 					results={options}
 					placeholder="Search..."
-					onSearchChange={handleSearch}
-					onResultSelect={handleSelect}
+					onSearchChange={onSearch}
+					onResultSelect={onSelect}
 					resultRenderer={resultRenderer}
 					css={searchStyles}
 				/>
