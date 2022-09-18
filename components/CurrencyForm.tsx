@@ -1,5 +1,5 @@
 import { css } from "@emotion/react"
-import React from "react"
+import React, { useState } from "react"
 import {
 	Card,
 	Flag,
@@ -26,6 +26,19 @@ type Props = {
 	onSelect: SelectHandler
 }
 const CurrencyForm = ({ options, onSearch, onSelect }: Props) => {
+	const [inputValue, setInputValue] = useState("")
+
+	const handleSearch: SearchHandler = (event, props) => {
+		if (!props.value) return setInputValue("")
+		setInputValue(props.value)
+		onSearch(event, props)
+	}
+
+	const handleSelect: SelectHandler = (event, props) => {
+		onSelect(event, props)
+		setInputValue("")
+	}
+
 	const resultRenderer = ({ title, description }: SearchResultProps) => (
 		<p>
 			<Flag name={title.slice(0, 2).toLocaleLowerCase() as FlagNameValues} />
@@ -41,9 +54,10 @@ const CurrencyForm = ({ options, onSearch, onSelect }: Props) => {
 					fluid
 					results={options}
 					placeholder="Search..."
-					onSearchChange={onSearch}
-					onResultSelect={onSelect}
+					onSearchChange={handleSearch}
+					onResultSelect={handleSelect}
 					resultRenderer={resultRenderer}
+					value={inputValue}
 					css={searchStyles}
 				/>
 			</Card.Content>
