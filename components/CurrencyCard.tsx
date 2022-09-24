@@ -48,13 +48,13 @@ const CurrencyCard = ({ as, item, currencies }: Props) => {
 						content={getCurrency(item.baseCurrency)?.name}
 						position="top center"
 						trigger={
-							<span>
+							<div css={popupStyles}>
 								<Flag
 									name={item.baseCurrency.slice(0, 2) as FlagNameValues}
 									css={flagStyles}
 								/>
 								{item.baseCurrency.toLocaleUpperCase()}
-							</span>
+							</div>
 						}
 					/>
 				</Label>
@@ -103,11 +103,15 @@ const flagStyles = css`
 const headingStyles = css`
 	position: absolute;
 	text-align: center;
-	top: -20px;
+	top: -24px;
 	left: 0;
 	right: 0;
 	width: 120px;
+	padding: 0 !important;
 	margin: 0 auto !important;
+`
+const popupStyles = css`
+	padding: 12px;
 `
 const listStyles = css`
 	padding-left: 0;
