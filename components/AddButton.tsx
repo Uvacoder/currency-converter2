@@ -5,7 +5,7 @@ import useSearchStore from "store/search"
 type Props = {
 	as?: keyof JSX.IntrinsicElements
 }
-const AddCurrencyCardButton = ({ as = "div" }: Props) => {
+const AddButton = ({ as = "div" }: Props) => {
 	const { showForm } = useSearchStore()
 
 	const Tag = as
@@ -13,6 +13,7 @@ const AddCurrencyCardButton = ({ as = "div" }: Props) => {
 	return (
 		<Tag css={controlStyles}>
 			<Button
+				name="add card"
 				icon="plus"
 				size="massive"
 				onClick={showForm}
@@ -80,4 +81,4 @@ const addCardButtonStyles = ({ sizes }: Theme) => css`
 	}
 `
 
-export default AddCurrencyCardButton
+export default AddButton

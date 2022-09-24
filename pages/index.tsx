@@ -1,6 +1,6 @@
 import { css, Theme } from "@emotion/react"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
-import AddCurrencyCardButton from "components/AddCurrencyCardButton"
+import AddButton from "components/AddButton"
 import CurrencyCard from "components/CurrencyCard"
 import CurrencyForm, {
 	SearchHandler,
@@ -57,7 +57,7 @@ const Home: NextPage<Props> = ({ currencies }) => {
 						/>
 					</li>
 				) : (
-					<AddCurrencyCardButton as="li" />
+					<AddButton as="li" />
 				)}
 			</ul>
 		</div>
