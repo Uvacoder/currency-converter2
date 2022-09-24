@@ -1,9 +1,10 @@
 import { css } from "@emotion/react"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
 import { Currency } from "currencies.json"
-import { Card, Flag, FlagNameValues, Label, Popup } from "semantic-ui-react"
+import { Card, Flag, FlagNameValues, Popup } from "semantic-ui-react"
 import useCardStore, { Card as Item } from "store/card"
 import { Option } from "store/search"
+import CardHeader from "./CardHeader"
 import CurrencyForm, { SearchHandler, SelectHandler } from "./CurrencyForm"
 
 type Props = {
@@ -40,24 +41,20 @@ const CurrencyCard = ({ as, item, currencies }: Props) => {
 		return currencies.find((c) => c.code.toLocaleLowerCase() === code)
 	}
 
+	const baseCurrency = getCurrency(item.baseCurrency)
+
+	if (!baseCurrency) {
+		return null
+	}
+
 	return (
 		<Card as={as} css={cardStyles}>
 			<Card.Content>
-				<Label basic size="big" css={headingStyles}>
-					<Popup
-						content={getCurrency(item.baseCurrency)?.name}
-						position="top center"
-						trigger={
-							<div css={popupStyles}>
-								<Flag
-									name={item.baseCurrency.slice(0, 2) as FlagNameValues}
-									css={flagStyles}
-								/>
-								{item.baseCurrency.toLocaleUpperCase()}
-							</div>
-						}
-					/>
-				</Label>
+				<CardHeader
+					currencyName={baseCurrency.name}
+					countryName={item.baseCurrency.slice(0, 2) as FlagNameValues}
+					currencyCode={item.baseCurrency}
+				/>
 				<CurrencyForm
 					options={item.options}
 					onSearch={handleSearch}
@@ -95,23 +92,6 @@ const cardStyles = css`
 	position: relative;
 	padding-top: 4px !important;
 	margin: 0 !important;
-`
-const flagStyles = css`
-	margin-top: 2px !important;
-	vertical-align: top !important;
-`
-const headingStyles = css`
-	position: absolute;
-	text-align: center;
-	top: -24px;
-	left: 0;
-	right: 0;
-	width: 120px;
-	padding: 0 !important;
-	margin: 0 auto !important;
-`
-const popupStyles = css`
-	padding: 12px;
 `
 const listStyles = css`
 	padding-left: 0;
