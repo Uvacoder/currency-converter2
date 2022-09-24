@@ -43,7 +43,7 @@ const Home: NextPage<Props> = ({ currencies }) => {
 	}
 
 	return (
-		<div>
+		<div css={appStyles}>
 			<ul ref={listRef} css={containerStyles}>
 				{cards.map((item, i) => (
 					<CurrencyCard key={i} item={item} currencies={currencies} />
@@ -73,9 +73,12 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
 	return { props: { currencies: data.currencies } }
 }
 
+const appStyles = css`
+	max-width: 1280px;
+	margin: auto;
+`
 const containerStyles = css`
 	display: flex;
-	margin: 80px;
 	padding: 40px;
 	gap: 32px;
 `
