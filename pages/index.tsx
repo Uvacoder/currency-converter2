@@ -32,7 +32,10 @@ const Home: NextPage<Props> = ({ currencies }) => {
 		const filteredOptions = allOptions.filter(
 			(option) =>
 				!mainCurrencies.includes(option.value.toLocaleUpperCase()) &&
-				option.title.includes(value.toLocaleUpperCase())
+				(option.title.includes(value.toLocaleUpperCase()) ||
+					option.description
+						.toLocaleLowerCase()
+						.includes(value.toLocaleLowerCase()))
 		)
 		setFormOptions(filteredOptions)
 	}

@@ -26,12 +26,15 @@ const CurrencyCard = ({ as, item, currencies }: Props) => {
 	const handleSearch: SearchHandler = (_, { value }) => {
 		if (!value) return setCardOptions({ base: item.baseCurrency, options: [] })
 		const filteredOptions = allOptions.filter(
-			(currency) =>
-				item.baseCurrency.code !== currency.value.toLocaleUpperCase() &&
+			(option) =>
+				item.baseCurrency.code !== option.value.toLocaleUpperCase() &&
 				!item.currencyList.find(
-					(item) => item.currency.code === currency.value.toLocaleUpperCase()
+					(item) => item.currency.code === option.value.toLocaleUpperCase()
 				) &&
-				currency.title.includes(value.toLocaleUpperCase())
+				(option.title.includes(value.toLocaleUpperCase()) ||
+					option.description
+						.toLocaleLowerCase()
+						.includes(value.toLocaleLowerCase()))
 		)
 		setCardOptions({ base: item.baseCurrency, options: filteredOptions })
 	}
