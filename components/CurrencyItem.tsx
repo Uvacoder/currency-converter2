@@ -20,7 +20,7 @@ const CurrencyItem = ({ item, multiplier }: Props) => {
 						<Card.Description css={itemStyles}>
 							<CurrencyFlag currencyCode={item.currency.code} />
 							{item.currency.code}{" "}
-							<span css={codeStyles}>{item.currency.symbol}</span>
+							<span css={codeStyles}>{item.currency.symbolNative}</span>
 							<span css={amountStyles}>{totalAmount.toFixed(2)}</span>
 						</Card.Description>
 					</Card.Content>
