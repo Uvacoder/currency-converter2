@@ -26,34 +26,35 @@ const CurrencyCard = ({ as, item, currencies }: Props) => {
 		if (!value) return setCardOptions({ base: item.baseCurrency, options: [] })
 		const filteredOptions = allOptions.filter(
 			(currency) =>
-				item.baseCurrency !== currency.value &&
-				!item.currencyList.find((c) => c.code === currency.value) &&
+				item.baseCurrency.code !== currency.value.toLocaleUpperCase() &&
+				!item.currencyList.find(
+					(item) => item.currency.code === currency.value.toLocaleUpperCase()
+				) &&
 				currency.title.includes(value.toLocaleUpperCase())
 		)
 		setCardOptions({ base: item.baseCurrency, options: filteredOptions })
 	}
 
 	const handleSelect: SelectHandler = async (_, { result }) => {
-		addCurrency({ base: item.baseCurrency, newCurrency: result.value })
-	}
-
-	const getCurrency = (code: string) => {
-		return currencies.find((c) => c.code.toLocaleLowerCase() === code)
-	}
-
-	const baseCurrency = getCurrency(item.baseCurrency)
-
-	if (!baseCurrency) {
-		return null
+		const newCurrency = currencies.find(
+			(c) => result.value === c.code.toLocaleLowerCase()
+		)
+		if (newCurrency) {
+			addCurrency({ base: item.baseCurrency, newCurrency })
+		}
 	}
 
 	return (
 		<Card as={as} css={cardStyles}>
 			<Card.Content>
 				<CardHeader
-					currencyName={baseCurrency.name}
-					countryName={item.baseCurrency.slice(0, 2) as FlagNameValues}
-					currencyCode={item.baseCurrency}
+					currencyName={item.baseCurrency.name}
+					countryName={
+						item.baseCurrency.code
+							.toLocaleLowerCase()
+							.slice(0, 2) as FlagNameValues
+					}
+					currencyCode={item.baseCurrency.code}
 				/>
 				<CurrencyForm
 					options={item.options}
@@ -61,21 +62,27 @@ const CurrencyCard = ({ as, item, currencies }: Props) => {
 					onSelect={handleSelect}
 				/>
 				<ul css={listStyles} ref={listRef}>
-					{item.currencyList.map((c, i) => (
+					{item.currencyList.map((item, i) => (
 						<Popup
 							key={i}
-							content={getCurrency(c.code)?.name}
+							content={item.currency.name}
 							position="top center"
 							trigger={
 								<Card as="li">
 									<Card.Content>
 										<Card.Description css={itemStyles}>
-											<Flag name={c.code.slice(0, 2) as FlagNameValues} />
-											{c.code.toLocaleUpperCase()}{" "}
-											<span css={codeStyles}>
-												{getCurrency(c.code)?.symbol}
+											<Flag
+												name={
+													item.currency.code
+														.toLocaleLowerCase()
+														.slice(0, 2) as FlagNameValues
+												}
+											/>
+											{item.currency.code}{" "}
+											<span css={codeStyles}>{item.currency.symbol}</span>
+											<span css={amountStyles}>
+												{item.conversion.toFixed(2)}
 											</span>
-											<span css={amountStyles}>{c.conversion.toFixed(2)}</span>
 										</Card.Description>
 									</Card.Content>
 								</Card>

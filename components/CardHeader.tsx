@@ -15,7 +15,7 @@ const CardHeader = ({ currencyName, countryName, currencyCode }: Props) => {
 				trigger={
 					<div css={popupStyles}>
 						<Flag name={countryName} css={flagStyles} />
-						{currencyCode.toLocaleUpperCase()}
+						{currencyCode}
 					</div>
 				}
 			/>

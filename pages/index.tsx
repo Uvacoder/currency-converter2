@@ -20,7 +20,7 @@ const Home: NextPage<Props> = ({ currencies }) => {
 	const [formRef] = useAutoAnimate<HTMLLIElement>()
 	const [listRef] = useAutoAnimate<HTMLUListElement>()
 
-	const mainCurrencies = cards.map((card) => card.baseCurrency)
+	const mainCurrencies = cards.map((card) => card.baseCurrency.code)
 	const allOptions: Option[] = currencies.map(({ code, name }) => ({
 		value: code.toLocaleLowerCase(),
 		title: code,
@@ -30,16 +30,21 @@ const Home: NextPage<Props> = ({ currencies }) => {
 	const handleSearch: SearchHandler = (_, { value }) => {
 		if (!value) return setFormOptions([])
 		const filteredOptions = allOptions.filter(
-			(currency) =>
-				!mainCurrencies.includes(currency.value) &&
-				currency.title.includes(value.toLocaleUpperCase())
+			(option) =>
+				!mainCurrencies.includes(option.value.toLocaleUpperCase()) &&
+				option.title.includes(value.toLocaleUpperCase())
 		)
 		setFormOptions(filteredOptions)
 	}
 
 	const handleSelect: SelectHandler = (_, { result }) => {
-		addCard(result.value)
-		hideForm()
+		const currency = currencies.find(
+			(c) => result.value === c.code.toLocaleLowerCase()
+		)
+		if (currency) {
+			addCard(currency)
+			hideForm()
+		}
 	}
 
 	return (
