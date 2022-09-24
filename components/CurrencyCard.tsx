@@ -73,6 +73,7 @@ const CurrencyCard = ({ as, item, currencies }: Props) => {
 				)}
 				<CurrencyForm
 					isLoading={item.loading}
+					isDisabled={item.currencyList.length >= item.limit}
 					options={item.options}
 					onSearch={handleSearch}
 					onSelect={handleSelect}
@@ -89,7 +90,7 @@ const CurrencyCard = ({ as, item, currencies }: Props) => {
 
 const cardStyles = css`
 	position: relative;
-	padding-top: 4px !important;
+	padding-top: 12px !important;
 	margin: 0 !important;
 `
 const listStyles = css`

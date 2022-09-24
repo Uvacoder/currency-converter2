@@ -13,6 +13,7 @@ export type Card = {
 	currencyList: CurrencyItem[]
 	options: Option[]
 	loading: boolean
+	limit: number
 }
 type AddCurrencyPayload = {
 	base: Currency
@@ -73,6 +74,7 @@ const addCard = (payload: Currency) => (state: CardState) => {
 		currencyList: [],
 		options: [],
 		loading: false,
+		limit: 6,
 	})
 }
 const addCurrency =
@@ -81,10 +83,13 @@ const addCurrency =
 		const cardIndex = state.cards.findIndex(
 			(card) => card.baseCurrency.code === payload.base.code
 		)
-		state.cards[cardIndex].currencyList.push({
-			currency: payload.newCurrency,
-			conversion: data.amount,
-		})
+		const card = state.cards[cardIndex]
+		if (card.currencyList.length < card.limit) {
+			card.currencyList.push({
+				currency: payload.newCurrency,
+				conversion: data.amount,
+			})
+		}
 	}
 const setCardOptions = (payload: SetOptionsPayload) => (state: CardState) => {
 	const cardIndex = state.cards.findIndex(

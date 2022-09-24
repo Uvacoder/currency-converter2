@@ -1,4 +1,4 @@
-import { css } from "@emotion/react"
+import { css, Theme } from "@emotion/react"
 import React, { useState } from "react"
 import {
 	Card,
@@ -22,10 +22,17 @@ export type SelectHandler = (
 type Props = {
 	options: Option[]
 	isLoading?: boolean
+	isDisabled?: boolean
 	onSearch: SearchHandler
 	onSelect: SelectHandler
 }
-const CurrencyForm = ({ options, isLoading, onSearch, onSelect }: Props) => {
+const CurrencyForm = ({
+	options,
+	isLoading,
+	isDisabled,
+	onSearch,
+	onSelect,
+}: Props) => {
 	const [inputValue, setInputValue] = useState("")
 
 	const handleSearch: SearchHandler = (event, props) => {
@@ -49,11 +56,12 @@ const CurrencyForm = ({ options, isLoading, onSearch, onSelect }: Props) => {
 	return (
 		<Card css={cardStyles}>
 			<Card.Content>
-				<p>Select base currency:</p>
+				<p css={isDisabled && disabledStyles}>Select base currency:</p>
 				<Search
 					fluid
 					results={options}
 					loading={isLoading}
+					disabled={isLoading || isDisabled}
 					placeholder="Search..."
 					onSearchChange={handleSearch}
 					onResultSelect={handleSelect}
@@ -68,6 +76,9 @@ const CurrencyForm = ({ options, isLoading, onSearch, onSelect }: Props) => {
 
 const cardStyles = css`
 	padding: 8px;
+`
+const disabledStyles = (theme: Theme) => css`
+	color: ${theme.colors.text.disabled};
 `
 const searchStyles = css`
 	& > .input {

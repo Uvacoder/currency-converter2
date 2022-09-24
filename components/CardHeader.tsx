@@ -30,7 +30,7 @@ const flagStyles = css`
 const headingStyles = css`
 	position: absolute;
 	text-align: center;
-	top: -24px;
+	top: -16px;
 	left: 0;
 	right: 0;
 	width: 120px;

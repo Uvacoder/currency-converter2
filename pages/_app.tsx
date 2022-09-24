@@ -30,6 +30,9 @@ const theme = {
 			cardBorder: "#d3d3d3",
 			button: "#c0c0c0",
 		},
+		text: {
+			disabled: "#e9e9e9",
+		},
 	},
 	sizes: {
 		control: {

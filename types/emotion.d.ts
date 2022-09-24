@@ -8,6 +8,9 @@ declare module "@emotion/react" {
 				cardBorder: string
 				button: string
 			}
+			text: {
+				disabled: string
+			}
 		}
 		sizes: {
 			control: {
