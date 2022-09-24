@@ -5,6 +5,7 @@ import { Card } from "semantic-ui-react"
 import useCardStore, { Card as Item } from "store/card"
 import { Option } from "store/search"
 import CardHeader from "./CardHeader"
+import CurrencyAmount, { AmountChangeHandler } from "./CurrencyAmount"
 import CurrencyForm, { SearchHandler, SelectHandler } from "./CurrencyForm"
 import CurrencyItem from "./CurrencyItem"
 
@@ -15,7 +16,7 @@ type Props = {
 }
 const CurrencyCard = ({ as, item, currencies }: Props) => {
 	const [listRef] = useAutoAnimate<HTMLUListElement>()
-	const { addCurrency, setCardOptions } = useCardStore()
+	const { cards, addCurrency, setCardOptions, setAmount } = useCardStore()
 
 	const allOptions: Option[] = currencies.map(({ code, name }) => ({
 		value: code.toLocaleLowerCase(),
@@ -48,6 +49,15 @@ const CurrencyCard = ({ as, item, currencies }: Props) => {
 		}
 	}
 
+	const handleAmountChange: AmountChangeHandler = (_, { value }) => {
+		if (value === "" || /^[0-9\b\.]+$/.test(value)) {
+			const index = cards.findIndex(
+				(c) => c.baseCurrency.code === item.baseCurrency.code
+			)
+			setAmount({ index, amount: value })
+		}
+	}
+
 	return (
 		<Card as={as} css={cardStyles}>
 			<Card.Content>
@@ -55,6 +65,12 @@ const CurrencyCard = ({ as, item, currencies }: Props) => {
 					currencyName={item.baseCurrency.name}
 					currencyCode={item.baseCurrency.code}
 				/>
+				{!!item.currencyList.length && (
+					<CurrencyAmount
+						amount={item.amount}
+						onAmountChange={handleAmountChange}
+					/>
+				)}
 				<CurrencyForm
 					isLoading={item.loading}
 					options={item.options}
@@ -62,8 +78,8 @@ const CurrencyCard = ({ as, item, currencies }: Props) => {
 					onSelect={handleSelect}
 				/>
 				<ul css={listStyles} ref={listRef}>
-					{item.currencyList.map((item, i) => (
-						<CurrencyItem key={i} item={item} />
+					{item.currencyList.map((currency, i) => (
+						<CurrencyItem key={i} item={currency} multiplier={item.amount} />
 					))}
 				</ul>
 			</Card.Content>

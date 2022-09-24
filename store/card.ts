@@ -8,6 +8,7 @@ export type CurrencyItem = {
 	conversion: number
 }
 export type Card = {
+	amount: string
 	baseCurrency: Currency
 	currencyList: CurrencyItem[]
 	options: Option[]
@@ -25,6 +26,10 @@ type SetLoadingPayload = {
 	index: number
 	loading: boolean
 }
+type SetAmountPayload = {
+	index: number
+	amount: string
+}
 type AddCurrencyResult = {
 	date: string
 	amount: number
@@ -36,6 +41,7 @@ type CardState = {
 	addCurrency: (payload: AddCurrencyPayload) => void
 	setCardOptions: (payload: SetOptionsPayload) => void
 	setLoading: (payload: SetLoadingPayload) => void
+	setAmount: (payload: SetAmountPayload) => void
 }
 const useCardStore = createStore<CardState>((set, get) => ({
 	cards: [],
@@ -57,10 +63,12 @@ const useCardStore = createStore<CardState>((set, get) => ({
 	},
 	setCardOptions: (payload) => set(setCardOptions(payload)),
 	setLoading: (payload) => set(setLoading(payload)),
+	setAmount: (payload) => set(setAmount(payload)),
 }))
 
 const addCard = (payload: Currency) => (state: CardState) => {
 	state.cards.push({
+		amount: "",
 		baseCurrency: payload,
 		currencyList: [],
 		options: [],
@@ -86,6 +94,9 @@ const setCardOptions = (payload: SetOptionsPayload) => (state: CardState) => {
 }
 const setLoading = (payload: SetLoadingPayload) => (state: CardState) => {
 	state.cards[payload.index].loading = payload.loading
+}
+const setAmount = (payload: SetAmountPayload) => (state: CardState) => {
+	state.cards[payload.index].amount = payload.amount
 }
 
 export default useCardStore

@@ -5,8 +5,11 @@ import CurrencyFlag from "./CurrencyFlag"
 
 type Props = {
 	item: CurrencyItem
+	multiplier: string
 }
-const CurrencyItem = ({ item }: Props) => {
+const CurrencyItem = ({ item, multiplier }: Props) => {
+	const totalAmount = item.conversion * (parseFloat(multiplier) || 0)
+
 	return (
 		<Popup
 			content={item.currency.name}
@@ -18,7 +21,7 @@ const CurrencyItem = ({ item }: Props) => {
 							<CurrencyFlag currencyCode={item.currency.code} />
 							{item.currency.code}{" "}
 							<span css={codeStyles}>{item.currency.symbol}</span>
-							<span css={amountStyles}>{item.conversion.toFixed(2)}</span>
+							<span css={amountStyles}>{totalAmount.toFixed(2)}</span>
 						</Card.Description>
 					</Card.Content>
 				</Card>
