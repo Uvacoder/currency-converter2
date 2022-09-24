@@ -1,12 +1,12 @@
 import { css } from "@emotion/react"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
 import { Currency } from "currencies.json"
-import { Card, Popup } from "semantic-ui-react"
+import { Card } from "semantic-ui-react"
 import useCardStore, { Card as Item } from "store/card"
 import { Option } from "store/search"
 import CardHeader from "./CardHeader"
-import CurrencyFlag from "./CurrencyFlag"
 import CurrencyForm, { SearchHandler, SelectHandler } from "./CurrencyForm"
+import CurrencyItem from "./CurrencyItem"
 
 type Props = {
 	as?: keyof JSX.IntrinsicElements
@@ -63,25 +63,7 @@ const CurrencyCard = ({ as, item, currencies }: Props) => {
 				/>
 				<ul css={listStyles} ref={listRef}>
 					{item.currencyList.map((item, i) => (
-						<Popup
-							key={i}
-							content={item.currency.name}
-							position="top center"
-							trigger={
-								<Card as="li">
-									<Card.Content>
-										<Card.Description css={itemStyles}>
-											<CurrencyFlag currencyCode={item.currency.code} />
-											{item.currency.code}{" "}
-											<span css={codeStyles}>{item.currency.symbol}</span>
-											<span css={amountStyles}>
-												{item.conversion.toFixed(2)}
-											</span>
-										</Card.Description>
-									</Card.Content>
-								</Card>
-							}
-						/>
+						<CurrencyItem key={i} item={item} />
 					))}
 				</ul>
 			</Card.Content>
@@ -96,21 +78,6 @@ const cardStyles = css`
 `
 const listStyles = css`
 	padding-left: 0;
-`
-const itemStyles = css`
-	display: grid;
-	align-items: center;
-	grid-template-columns: 24px 40px auto 1fr;
-`
-const codeStyles = css`
-	font-size: 20px;
-	font-weight: bold;
-	padding-bottom: 2px;
-`
-const amountStyles = css`
-	text-align: right;
-	font-size: 16px;
-	font-weight: bold;
 `
 
 export default CurrencyCard
