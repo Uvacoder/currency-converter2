@@ -53,6 +53,7 @@ const CurrencyCard = ({ as, item, currencies }: Props) => {
 					currencyCode={item.baseCurrency.code}
 				/>
 				<CurrencyForm
+					isLoading={item.loading}
 					options={item.options}
 					onSearch={handleSearch}
 					onSelect={handleSelect}

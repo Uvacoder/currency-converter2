@@ -21,10 +21,11 @@ export type SelectHandler = (
 
 type Props = {
 	options: Option[]
+	isLoading?: boolean
 	onSearch: SearchHandler
 	onSelect: SelectHandler
 }
-const CurrencyForm = ({ options, onSearch, onSelect }: Props) => {
+const CurrencyForm = ({ options, isLoading, onSearch, onSelect }: Props) => {
 	const [inputValue, setInputValue] = useState("")
 
 	const handleSearch: SearchHandler = (event, props) => {
@@ -52,6 +53,7 @@ const CurrencyForm = ({ options, onSearch, onSelect }: Props) => {
 				<Search
 					fluid
 					results={options}
+					loading={isLoading}
 					placeholder="Search..."
 					onSearchChange={handleSearch}
 					onResultSelect={handleSelect}

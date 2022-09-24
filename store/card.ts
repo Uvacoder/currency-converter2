@@ -11,6 +11,7 @@ export type Card = {
 	baseCurrency: Currency
 	currencyList: CurrencyItem[]
 	options: Option[]
+	loading: boolean
 }
 type AddCurrencyPayload = {
 	base: Currency
@@ -19,6 +20,10 @@ type AddCurrencyPayload = {
 type SetOptionsPayload = {
 	base: Currency
 	options: Option[]
+}
+type SetLoadingPayload = {
+	index: number
+	loading: boolean
 }
 type AddCurrencyResult = {
 	date: string
@@ -30,23 +35,37 @@ type CardState = {
 	addCard: (payload: Currency) => void
 	addCurrency: (payload: AddCurrencyPayload) => void
 	setCardOptions: (payload: SetOptionsPayload) => void
+	setLoading: (payload: SetLoadingPayload) => void
 }
-const useCardStore = createStore<CardState>((set) => ({
+const useCardStore = createStore<CardState>((set, get) => ({
 	cards: [],
 	addCard: (payload) => set(addCard(payload)),
 	addCurrency: async (payload) => {
+		const index = get().cards.findIndex(
+			(c) => c.baseCurrency.code === payload.base.code
+		)
+		set(setLoading({ index, loading: true }))
 		const { request } = await apiFetch()
 		const { data } = await request.post("convertCurrency", {
 			from: payload.base.code.toLocaleLowerCase(),
 			to: payload.newCurrency.code.toLocaleLowerCase(),
 		})
 		set(addCurrency(payload, data))
+		setTimeout(() => {
+			set(setLoading({ index, loading: false }))
+		}, 300)
 	},
 	setCardOptions: (payload) => set(setCardOptions(payload)),
+	setLoading: (payload) => set(setLoading(payload)),
 }))
 
 const addCard = (payload: Currency) => (state: CardState) => {
-	state.cards.push({ baseCurrency: payload, currencyList: [], options: [] })
+	state.cards.push({
+		baseCurrency: payload,
+		currencyList: [],
+		options: [],
+		loading: false,
+	})
 }
 const addCurrency =
 	(payload: AddCurrencyPayload, data: AddCurrencyResult) =>
@@ -64,6 +83,9 @@ const setCardOptions = (payload: SetOptionsPayload) => (state: CardState) => {
 		(card) => card.baseCurrency.code === payload.base.code
 	)
 	state.cards[cardIndex].options = payload.options
+}
+const setLoading = (payload: SetLoadingPayload) => (state: CardState) => {
+	state.cards[payload.index].loading = payload.loading
 }
 
 export default useCardStore
