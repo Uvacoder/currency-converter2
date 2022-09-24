@@ -1,12 +1,12 @@
 import { css } from "@emotion/react"
-import { Flag, FlagNameValues, Label, Popup } from "semantic-ui-react"
+import { Label, Popup } from "semantic-ui-react"
+import CurrencyFlag from "./CurrencyFlag"
 
 type Props = {
 	currencyName: string
-	countryName: FlagNameValues
 	currencyCode: string
 }
-const CardHeader = ({ currencyName, countryName, currencyCode }: Props) => {
+const CardHeader = ({ currencyName, currencyCode }: Props) => {
 	return (
 		<Label basic size="big" css={headingStyles}>
 			<Popup
@@ -14,7 +14,7 @@ const CardHeader = ({ currencyName, countryName, currencyCode }: Props) => {
 				position="top center"
 				trigger={
 					<div css={popupStyles}>
-						<Flag name={countryName} css={flagStyles} />
+						<CurrencyFlag currencyCode={currencyCode} css={flagStyles} />
 						{currencyCode}
 					</div>
 				}

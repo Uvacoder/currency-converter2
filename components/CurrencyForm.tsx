@@ -2,14 +2,13 @@ import { css } from "@emotion/react"
 import React, { useState } from "react"
 import {
 	Card,
-	Flag,
-	FlagNameValues,
 	Search,
 	SearchProps,
 	SearchResultData,
 	SearchResultProps,
 } from "semantic-ui-react"
 import { Option } from "store/search"
+import CurrencyFlag from "./CurrencyFlag"
 
 export type SearchHandler = (
 	event: React.MouseEvent<HTMLElement, MouseEvent>,
@@ -41,7 +40,7 @@ const CurrencyForm = ({ options, onSearch, onSelect }: Props) => {
 
 	const resultRenderer = ({ title, description }: SearchResultProps) => (
 		<p>
-			<Flag name={title.slice(0, 2).toLocaleLowerCase() as FlagNameValues} />
+			<CurrencyFlag currencyCode={title} />
 			{title} - {description}
 		</p>
 	)

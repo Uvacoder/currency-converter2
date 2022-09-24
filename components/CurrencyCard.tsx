@@ -1,10 +1,11 @@
 import { css } from "@emotion/react"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
 import { Currency } from "currencies.json"
-import { Card, Flag, FlagNameValues, Popup } from "semantic-ui-react"
+import { Card, Popup } from "semantic-ui-react"
 import useCardStore, { Card as Item } from "store/card"
 import { Option } from "store/search"
 import CardHeader from "./CardHeader"
+import CurrencyFlag from "./CurrencyFlag"
 import CurrencyForm, { SearchHandler, SelectHandler } from "./CurrencyForm"
 
 type Props = {
@@ -49,11 +50,6 @@ const CurrencyCard = ({ as, item, currencies }: Props) => {
 			<Card.Content>
 				<CardHeader
 					currencyName={item.baseCurrency.name}
-					countryName={
-						item.baseCurrency.code
-							.toLocaleLowerCase()
-							.slice(0, 2) as FlagNameValues
-					}
 					currencyCode={item.baseCurrency.code}
 				/>
 				<CurrencyForm
@@ -71,13 +67,7 @@ const CurrencyCard = ({ as, item, currencies }: Props) => {
 								<Card as="li">
 									<Card.Content>
 										<Card.Description css={itemStyles}>
-											<Flag
-												name={
-													item.currency.code
-														.toLocaleLowerCase()
-														.slice(0, 2) as FlagNameValues
-												}
-											/>
+											<CurrencyFlag currencyCode={item.currency.code} />
 											{item.currency.code}{" "}
 											<span css={codeStyles}>{item.currency.symbol}</span>
 											<span css={amountStyles}>
